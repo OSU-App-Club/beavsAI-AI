@@ -8,7 +8,7 @@ This is the AI Hub for the Beavs.ai project. This is where we'll store our data,
 
 ### Prerequisites
 
-- [Python 3.9](https://www.python.org/downloads/release/python-390/)
+- [Python 3.9-3.11 (3.12 will NOT work)](https://www.python.org/downloads/release/python-390/)
 - [Pip](https://pip.pypa.io/en/stable/getting-started/)
 - [Uvicorn](https://www.uvicorn.org/)
 - [FastAPI](https://fastapi.tiangolo.com/)
