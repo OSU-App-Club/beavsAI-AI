@@ -1,2 +1,4 @@
-server/venv
+venv/
 server/__pycache__
+
+pinecone/constants.py

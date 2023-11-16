@@ -1,0 +1,2 @@
+As of now, langchain does NOT have support for Python 3.12. Only versions 3.10 and 3.11 are supported.
+All development must be done in either one of these versions.
