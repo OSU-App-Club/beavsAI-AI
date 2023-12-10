@@ -1,36 +1,38 @@
 # © 2023 App Development Club @ Oregon State Unviersity
 # All Rights Reserved
 
-# This file exposes a REST API that can be used to interact with the Pinecone vector store. 
-# It is intended to be used as a reference for how to use Pinecone in a production environment. 
-# It is not intended to be used as a production server. 
+# This file exposes a REST API that can be used to interact with the Pinecone vector store.
+# It is intended to be used as a reference for how to use Pinecone in a production environment.
+# It is not intended to be used as a production server.
 # For example, it does not have any authentication or rate limiting.
 
 # All of the functionality in this file can be used for free with the starter indexes/environment.
 
 # However, if you're wanting to extend this and add expanded functionality, you
-# will need to upgrade to a paid plan and put that in your .env file. 
+# will need to upgrade to a paid plan and put that in your .env file.
 
 import json
 import logging
 import os
 import re
-from typing import Union
+import uuid
+from datetime import datetime, timedelta
+from typing import Optional, Union
 
 import pinecone
 import uvicorn
+from constants import course_map, data_map
 from dotenv import load_dotenv
-from fastapi import FastAPI, File, UploadFile
+from fastapi import Depends, FastAPI, File, HTTPException, UploadFile, status
+from jose import JWTError, jwt
 from langchain.chains.question_answering import load_qa_chain
 from langchain.document_loaders import UnstructuredPDFLoader
 from langchain.embeddings.openai import OpenAIEmbeddings
 from langchain.llms import OpenAI
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.vectorstores import Pinecone
-from pydantic import BaseModel, Field
 from starlette.middleware.cors import CORSMiddleware
-
-from constants import course_map, data_map
+from pydantic import BaseModel
 
 origins = [
     "http://localhost:8080",
@@ -50,6 +52,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
 
 class LoadDocuemnts(BaseModel):
     class_name: str
@@ -161,6 +164,9 @@ load_dotenv()
 OPENAI_API_KEY = os.environ["OPENAI_API_KEY"]
 PINECONE_API_KEY = os.environ["PINECONE_API_KEY"]
 PINECONE_API_ENV = os.environ["PINECONE_API_ENV"]
+SECRET_KEY = os.environ["SECRET_KEY"]
+ALGORITHM = os.environ["ALGORITHM"]
+ACCESS_TOKEN_EXPIRE_MINUTES = os.environ["ACCESS_TOKEN_EXPIRE_MINUTES"]
 
 pinecone.init(
     api_key=PINECONE_API_KEY,
@@ -236,6 +242,10 @@ async def list_index_info(index_name: str):
 def available_data():
     return data_map
 
+
 # Uvicorn isn't required, but it's a nice way to run a webserver in python
 if __name__ == "__main__":
-    uvicorn.run("main:app", host="localhost", port=8080, log_level="info", reload=True)
+    if os.environ.get("RENDER") == True:
+        uvicorn.run("main:app", host="0.0.0.0", port=10000, reload=True)
+    else:
+        uvicorn.run("main:app", host="localhost", port=8080, reload=True)
