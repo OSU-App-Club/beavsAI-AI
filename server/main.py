@@ -39,6 +39,7 @@ origins = [
     "http://localhost:8000",
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    "https://beavsai-onrender.com",
 ]
 
 # Create the FastAPI app
@@ -245,7 +246,7 @@ def available_data():
 
 # Uvicorn isn't required, but it's a nice way to run a webserver in python
 if __name__ == "__main__":
-    if os.environ.get("RENDER") == True:
-        uvicorn.run("main:app", host="0.0.0.0", port=10000, reload=True)
+    if os.environ.get("RENDER") == True or os.environ.get("RENDER") == "true" or os.environ.get("RENDER") == "True":
+        uvicorn.run("main:app", host="0.0.0.0", port=10000, reload=False)
     else:
         uvicorn.run("main:app", host="localhost", port=8080, reload=True)
