@@ -47,7 +47,7 @@ app = FastAPI()
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "http://0.0.0.0:8080", "https://beavsai-onrender.com", "https://beavsai-backend.onrender.com"],
+    allow_origins=["http://localhost:5173", "http://0.0.0.0:8080", "https://beavsai.onrender.com", "https://beavsai-backend.onrender.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
