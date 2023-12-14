@@ -216,7 +216,7 @@ async def load_documents(load_documents: LoadDocuemnts):
 # Get q&a for a class classname w/ query
 @app.post("/response")
 async def get_response(get_response: GetResponse):
-    index_name = f"cs{get_response.class_name.lower()}-index"
+    index_name = f"{get_response.class_name.lower()}-index"
     docsearch = Pinecone.from_existing_index(index_name, embeddings)
     docs = docsearch.similarity_search(get_response.query)
     llm = OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY)
